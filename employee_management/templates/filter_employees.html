@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Employees</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        form, table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .navigation a {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .navigation a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Filter Employees</h1>
+    <div class="navigation">
+        <a href="/add_employee">Go to Add Employee Page</a>
+        <a href="/edit_employee">Go to Edit/Delete Employee Page</a>
+    </div>
+
+    <!-- Filter Form -->
+    <form method="GET" action="/filter/">
+        <h2>Filter Criteria</h2>
+
+        <!-- Sex Dropdown -->
+        <label for="sex">Sex:</label>
+        <select id="sex" name="sex">
+            <option value="">--Select--</option>
+            <option value="Male" {% if filters.sex == "Male" %}selected{% endif %}>Male</option>
+            <option value="Female" {% if filters.sex == "Female" %}selected{% endif %}>Female</option>
+        </select>
+
+        <!-- Position Dropdown -->
+        <label for="position">Position:</label>
+        <select id="position" name="position">
+            <option value="">--Select--</option>
+            {% for position in positions %}
+            <option value="{{ position }}" {% if filters.position == position %}selected{% endif %}>{{ position }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Degree Dropdown -->
+        <label for="degree">Degree:</label>
+        <select id="degree" name="degree">
+            <option value="">--Select--</option>
+            {% for degree in degrees %}
+            <option value="{{ degree }}" {% if filters.degree == degree %}selected{% endif %}>{{ degree }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Major Dropdown -->
+        <label for="major">Major:</label>
+        <select id="major" name="major">
+            <option value="">--Select--</option>
+            {% for major in majors %}
+            <option value="{{ major }}" {% if filters.major == major %}selected{% endif %}>{{ major }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- GPA Dropdown -->
+        <label for="gpa">GPA (greater than or equal to):</label>
+        <select id="gpa" name="gpa">
+            <option value="">--Select--</option>
+            {% for gpa in gpas %}
+            <option value="{{ gpa }}" {% if filters.gpa == gpa|stringformat:"f" %}selected{% endif %}>{{ gpa }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    <!-- Filtered Employees Table -->
+    <h2>Filtered Employees</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Address</th>
+                <th>Position</th>
+                <th>Sex</th>
+                <th>Age</th>
+                <th>College Name</th>
+                <th>College Address</th>
+                <th>Degree</th>
+                <th>Major</th>
+                <th>GPA</th>
+                <th>Graduation Year</th>
+                <th>Office Name</th>
+                <th>Office Address</th>
+                <th>Year</th>
+                <th>Total Employees</th>
+                <th>Established Year</th>
+                <th>Net Worth</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in combined_data %}
+            <tr>
+                <td>{{ data.employee.id }}</td>
+                <td>{{ data.employee.name }}</td>
+                <td>{{ data.employee.date_of_birth }}</td>
+                <td>{{ data.employee.address }}</td>
+                <td>{{ data.employee.position }}</td>
+                <td>{{ data.employee.sex }}</td>
+                <td>{{ data.employee.age }}</td>
+                <td>{{ data.education.collegename }}</td>
+                <td>{{ data.education.address }}</td>
+                <td>{{ data.education.degreecompleted }}</td>
+                <td>{{ data.education.major }}</td>
+                <td>{{ data.education.gpa }}</td>
+                <td>{{ data.education.year }}</td>
+                <td>{{ data.office.officeName }}</td>
+                <td>{{ data.office.address }}</td>
+                <td>{{ data.office.year }}</td>
+                <td>{{ data.office.totalEmployee }}</td>
+                <td>{{ data.office.establishedYear }}</td>
+                <td>{{ data.office.netWorth }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="19" style="text-align: center;">No employees found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
