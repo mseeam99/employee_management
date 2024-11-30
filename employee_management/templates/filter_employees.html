@@ -71,8 +71,9 @@
         <label for="sex">Sex:</label>
         <select id="sex" name="sex">
             <option value="">--Select--</option>
-            <option value="Male" {% if filters.sex == "Male" %}selected{% endif %}>Male</option>
-            <option value="Female" {% if filters.sex == "Female" %}selected{% endif %}>Female</option>
+            {% for sex in sexes %}
+            <option value="{{ sex }}" {% if filters.sex == sex %}selected{% endif %}>{{ sex }}</option>
+            {% endfor %}
         </select>
 
         <!-- Position Dropdown -->
